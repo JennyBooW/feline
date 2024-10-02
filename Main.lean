@@ -32,19 +32,19 @@ def file_stream (filename : System.FilePath) : IO (Option IO.FS.Stream) := do
 
 -- Print out help information
 
-def help : IO UInt32 := do
+def help (exit_code : UInt32): IO UInt32 := do
   let out <- IO.getStdout
   out.putStrLn "This is a cat-lite utility, it allows you to read file content MEOW!"
   out.putStrLn "This will allow you to add a separtor'echo''and purr' | ./build/bin/feline test1.txt - test2.txt"
   out.putStrLn "This will echo your input echo 'It works!' | ./build/bin/feline"
-  pure 1
+  pure exit_code
 
 -- Process the user input
 
 def process (exit_code : UInt32) (args : List String) : IO UInt32 := do
   match args with
   | []  => pure exit_code
-  | ["--help"] => help
+  | ["--help"] => help exit_code
   | "-" :: args =>
     let stdin <- IO.getStdin
     dump stdin
